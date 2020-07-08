@@ -1,0 +1,18 @@
+Create Role
+Attach policy to Role:SSM role for EC2 instance(System Manager Role)
+[
+Create New EC2 instance(Windows Instance)
+Assign Role that we created to EC2
+Add tag(Name - Name,Value-TestServiceGroup)
+]
+AWS System Manager>Managed Instance>Setup Inventory
+[
+Specify a tag-Name,DevTest
+]
+Run the Inventory
+Install Java on That instance is verified
+Verify Config Service is recording Changes(Recrding is on)
+AWS Config>Rules>Add Rules>search "blacklist"
+
+
+

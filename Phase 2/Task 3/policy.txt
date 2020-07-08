@@ -1,0 +1,37 @@
+- name: high-risk-security-groups
+    resource: security-group
+    description: |
+      Find any rule from a security group that allows 0.0.0.0/0 or ::/0 (IPv6) ingress
+      and notify the user.
+    mode:
+        type: cloudtrail
+        role: arn:aws:iam::987659872123:role/cloudcustodian
+        events:
+          - source: ec2.amazonaws.com
+            event: AuthorizeSecurityGroupIngress
+            ids: "requestParameters.groupId"
+          - source: ec2.amazonaws.com
+            event: RevokeSecurityGroupIngress
+            ids: "requestParameters.groupId"
+    filters:
+       - and:
+            - type: security-group
+              key: GroupId
+              #key: SecurityGroups[].GroupID  
+              op: not-in
+              value:
+                - sg-0db5e1ab7s8323
+       - or:
+            - type: ingress
+              OnlyPorts: [80, 443]
+              Cidr:
+                value: "0.0.0.0/0"
+                op: in
+            - type: ingress
+              OnlyPorts: [80, 443]
+              CidrV6:
+                value:  "::/0"
+                op: in
+    actions:
+        - type: 
+          ingress: matched
